@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="sedo_cuf_perms" title="Custom User Fields Permissions" version_string="1.0.0" version_id="1" url="" install_callback_class="Sedo_CufPerms_Installer" install_callback_method="install" uninstall_callback_class="Sedo_CufPerms_Installer" uninstall_callback_method="uninstall">
+  <admin_navigation/>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates>
+    <template title="sedo_user_field_edit_perms_pane"><![CDATA[<li>
+	<fieldset>
+	<xen:controlunit label="{xen:phrase sedo_cuf_perms_input}">
+		<xen:html>
+			<xen:selectunit name="sedo_perms_input_enable" value="{$field.sedo_perms_input_enable}" label="{xen:phrase sedo_cuf_perms_enable_perms}">
+				<xen:option label="{xen:phrase no}" value="0" />
+				<xen:option label="{xen:phrase yes}" value="1" />
+				<xen:explain>{xen:phrase sedo_cuf_perms_enable_perms_desc}</xen:explain>
+			</xen:selectunit>
+			<xen:checkboxunit label="{xen:phrase sedo_cuf_perms_select_usergroups}:">
+				<xen:foreach loop="$field.sedo_perms_input_val" value="$list">
+					<xen:option name="sedo_perms_input_val[]" value="{$list.value}" selected="{$list.selected}">{$list.label}</xen:option>
+				</xen:foreach>
+				<xen:explain>{xen:phrase sedo_cuf_perms_select_usergroups_desc}</xen:explain>
+			</xen:checkboxunit>			
+		</xen:html>
+		<xen:explain>{xen:phrase sedo_cuf_perms_input_desc}</xen:explain>
+	</xen:controlunit>
+	</fieldset>
+
+	<fieldset>
+	<xen:controlunit label="{xen:phrase sedo_cuf_perms_output_pp}">
+		<xen:html>
+			<xen:selectunit name="sedo_perms_output_pp_enable" value="{$field.sedo_perms_output_pp_enable}" label="{xen:phrase sedo_cuf_perms_enable_perms}">
+				<xen:option label="{xen:phrase no}" value="0" />
+				<xen:option label="{xen:phrase yes}" value="1" />
+				<xen:explain>{xen:phrase sedo_cuf_perms_enable_perms_desc}</xen:explain>
+			</xen:selectunit>
+			<xen:checkboxunit label="{xen:phrase sedo_cuf_perms_select_usergroups}:">
+				<xen:foreach loop="$field.sedo_perms_output_pp_val" value="$list">
+					<xen:option name="sedo_perms_output_pp_val[]" value="{$list.value}" selected="{$list.selected}">{$list.label}</xen:option>
+				</xen:foreach>
+				<xen:explain>{xen:phrase sedo_cuf_perms_select_usergroups_desc}</xen:explain>
+			</xen:checkboxunit>			
+		</xen:html>
+		<xen:explain>{xen:phrase sedo_cuf_perms_output_pp_desc}</xen:explain>
+	</xen:controlunit>
+	</fieldset>
+
+	<fieldset>
+	<xen:controlunit label="{xen:phrase sedo_cuf_perms_output_ui}">
+		<xen:html>
+			<xen:selectunit name="sedo_perms_output_ui_enable" value="{$field.sedo_perms_output_ui_enable}" label="{xen:phrase sedo_cuf_perms_enable_perms}">
+				<xen:option label="{xen:phrase no}" value="0" />
+				<xen:option label="{xen:phrase yes}" value="1" />
+				<xen:explain>{xen:phrase sedo_cuf_perms_enable_perms_desc}</xen:explain>
+			</xen:selectunit>
+			<xen:checkboxunit label="{xen:phrase sedo_cuf_perms_select_usergroups}:">
+				<xen:foreach loop="$field.sedo_perms_output_ui_val" value="$list">
+					<xen:option name="sedo_perms_output_ui_val[]" value="{$list.value}" selected="{$list.selected}">{$list.label}</xen:option>
+				</xen:foreach>
+				<xen:explain>{xen:phrase sedo_cuf_perms_select_usergroups_desc}</xen:explain>
+			</xen:checkboxunit>			
+		</xen:html>
+		<xen:explain>{xen:phrase sedo_cuf_perms_output_ui_desc}</xen:explain>
+	</xen:controlunit>
+	</fieldset>
+</li>]]></template>
+  </admin_templates>
+  <admin_template_modifications>
+    <modification template="user_field_edit" modification_key="sedo_cuf_perms" description="Add custom tab/pane in Custom User Fields for permissions" execution_order="10" enabled="1" action="callback">
+      <find><![CDATA[#^.*$#siu]]></find>
+      <replace><![CDATA[Sedo_CufPerms_Listener::CMS_user_field_edit]]></replace>
+    </modification>
+  </admin_template_modifications>
+  <code_events/>
+  <code_event_listeners>
+    <listener event_id="init_dependencies" execute_order="10" callback_class="Sedo_CufPerms_Listener" callback_method="initTemplateHelpers" active="1" hint="" description="Extends template helpers"/>
+    <listener event_id="load_class_datawriter" execute_order="10" callback_class="Sedo_CufPerms_Listener" callback_method="extendsDwUserField" active="1" hint="XenForo_DataWriter_UserField" description="Extends XenForo_DataWriter_UserField"/>
+    <listener event_id="load_class_model" execute_order="10" callback_class="Sedo_CufPerms_Listener" callback_method="extendsModelUserField" active="1" hint="XenForo_Model_UserField" description="Extends XenForo_Model_UserField"/>
+    <listener event_id="load_class_view" execute_order="10" callback_class="Sedo_CufPerms_Listener" callback_method="extendsViewAdminUserFieldEdit" active="1" hint="XenForo_ViewAdmin_UserField_Edit" description="Extends XenForo_ViewAdmin_UserField_Edit to process to perms"/>
+    <listener event_id="load_class_view" execute_order="10" callback_class="Sedo_CufPerms_Listener" callback_method="extendsViewPublicMemberView" active="1" hint="XenForo_ViewPublic_Member_View" description="Extends XenForo_ViewPublic_Member_View"/>
+    <listener event_id="load_class_view" execute_order="10" callback_class="Sedo_CufPerms_Listener" callback_method="extendsViewPublicAccountPreferences" active="1" hint="XenForo_ViewPublic_Account_Preferences" description="Extends XenForo_ViewPublic_Account_Preferences"/>
+    <listener event_id="load_class_view" execute_order="10" callback_class="Sedo_CufPerms_Listener" callback_method="extendsViewPublicAccountPersonalDetails" active="1" hint="XenForo_ViewPublic_Account_PersonalDetails" description="Extends XenForo_ViewPublic_Account_PersonalDetails"/>
+    <listener event_id="load_class_view" execute_order="10" callback_class="Sedo_CufPerms_Listener" callback_method="extendsViewPublicAccountContactPreferences" active="1" hint="XenForo_ViewPublic_Account_ContactPreferences" description="Extends XenForo_ViewPublic_Account_ContactPreferences"/>
+  </code_event_listeners>
+  <cron/>
+  <email_templates/>
+  <email_template_modifications/>
+  <optiongroups/>
+  <permissions>
+    <permission_groups/>
+    <permissions/>
+    <interface_groups/>
+  </permissions>
+  <phrases>
+    <phrase title="sedo_cuf_perms_enable_perms" version_id="1" version_string="1.0.0"><![CDATA[Enable]]></phrase>
+    <phrase title="sedo_cuf_perms_enable_perms_desc" version_id="1" version_string="1.0.0"><![CDATA[Do you want to enable permissions based on  below settings?]]></phrase>
+    <phrase title="sedo_cuf_perms_input" version_id="1" version_string="1.0.0"><![CDATA[Input permissions]]></phrase>
+    <phrase title="sedo_cuf_perms_input_desc" version_id="1" version_string="1.0.0"><![CDATA[Activate these permissions to select which usergroups can access and edit this custom field ]]></phrase>
+    <phrase title="sedo_cuf_perms_output_pp" version_id="1" version_string="1.0.0"><![CDATA[Output permissions on profile pages]]></phrase>
+    <phrase title="sedo_cuf_perms_output_pp_desc" version_id="1" version_string="1.0.0"><![CDATA[Activate these permissions to select which usergroups can access this custom field on profile pages]]></phrase>
+    <phrase title="sedo_cuf_perms_output_ui" version_id="1" version_string="1.0.0"><![CDATA[Output permissions in message user info
+
+]]></phrase>
+    <phrase title="sedo_cuf_perms_output_ui_desc" version_id="1" version_string="1.0.0"><![CDATA[Activate these permissions to select which usergroups can access this custom field in message user info.]]></phrase>
+    <phrase title="sedo_cuf_perms_select_usergroups" version_id="1" version_string="1.0.0"><![CDATA[Select Usergroups]]></phrase>
+    <phrase title="sedo_cuf_perms_select_usergroups_desc" version_id="1" version_string="1.0.0"><![CDATA[Select which usergroups can access this custom user field]]></phrase>
+  </phrases>
+  <route_prefixes/>
+  <style_properties/>
+  <templates/>
+  <public_template_modifications/>
+  <bb_code_media_sites/>
+  <bb_codes/>
+</addon>
