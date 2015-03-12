@@ -10,7 +10,23 @@ class Sedo_CufPerms_ViewAdmin_UserField_Edit extends XFCP_Sedo_CufPerms_ViewAdmi
 			parent::renderHtml();
 		}
 
-		if(!isset($this->_params['field'], $this->_params['field']['sedo_perms_input_val']))
+		if(!isset($this->_params['field']))
+		{
+			return;
+		}
+
+		if($this->_params['field']['field_id'] === NULL)
+		{
+			$optionGetUsergroupsModel = XenForo_Model::create('Sedo_CufPerms_Model_GetUsergroups');
+			foreach($this->_sedoPermsValKeys as $key)
+			{
+				$settings = array();
+				$this->_params['field'][$key] = $optionGetUsergroupsModel->getUserGroupOptions($settings, true);
+			}
+			
+			return;
+		}
+		elseif(!isset($this->_params['field']['sedo_perms_input_val']))
 		{
 			return;
 		}
