@@ -7,7 +7,7 @@ class Sedo_CufPerms_Model_GetUserGroups extends XenForo_Model
 		foreach ($this->getDbUserGroups($addAllOption) AS $userGroup)
 		{
 			$userGroups[] = array(
-				'label' => $userGroup['title'],
+				'label' => filter_var($userGroup['title'], FILTER_SANITIZE_STRING),
 				'value' => $userGroup['user_group_id'],
 				'selected' => in_array($userGroup['user_group_id'], $selectedUserGroupIds)
 			);
