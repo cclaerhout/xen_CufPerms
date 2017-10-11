@@ -6,9 +6,9 @@ class Sedo_CufPerms_Installer
 			'sedo_perms_input_enable'		=> "TINYINT UNSIGNED NOT NULL DEFAULT 0",
 			'sedo_perms_output_pp_enable'		=> "TINYINT UNSIGNED NOT NULL DEFAULT 0",
 			'sedo_perms_output_ui_enable'		=> "TINYINT UNSIGNED NOT NULL DEFAULT 0",
-			'sedo_perms_input_val'			=> "BLOB NOT NULL",
-			'sedo_perms_output_pp_val'		=> "BLOB NOT NULL",
-			'sedo_perms_output_ui_val'		=> "BLOB NOT NULL"			
+			'sedo_perms_input_val'			=> "BLOB DEFAULT NULL",
+			'sedo_perms_output_pp_val'		=> "BLOB DEFAULT NULL",
+			'sedo_perms_output_ui_val'		=> "BLOB DEFAULT NULL"
 		)
 	);
 
@@ -30,6 +30,16 @@ class Sedo_CufPerms_Installer
 			}
 		}
 
+		if(!empty($addon['version_id']) && $addon['version_id'] < 10002)
+		{
+			foreach(self::$xenTables as $tableName => $tableData)
+			{
+				foreach($tableData as $fieldName => $fieldAttr)
+				{
+					self::changeColumnValueIfExist($db, $tableName, $fieldName, $fieldAttr);
+				}
+			}
+		}
 	}
 
 	public static function uninstall()
